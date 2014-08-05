@@ -84,6 +84,12 @@ body {
 	margin-bottom: 10px;
 }
 
+.nsc-key-btn {
+	min-width: 20%;
+    max-width: 20%;
+}
 
-
-
+.nsc-header-btn {
+	min-width: 70%;
+    max-width: 70%;
+}
