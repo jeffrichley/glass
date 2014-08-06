@@ -55,8 +55,6 @@ public class CompareProvider extends GlassDataProvider<CompareData> {
 				StringDataColumn labelColumn = (StringDataColumn) matrix.getDataColumn(firstColumnName);
 				DoubleDataColumn numericColumn = (DoubleDataColumn) matrix.getDataColumn(secondColumnName);
 				LabelNumericCompareData tmpData = new LabelNumericComparer().compare(labelColumn, numericColumn);
-				String tmpId = "compare-info-"+secondColumnName+"-"+firstColumnName+"-";
-//				cacheManager.cache("LABEL_NUMERIC-"+getCacheId(tmpId), new Gson().toJson(tmpData));
 				cacheManager.cache("LABEL_NUMERIC-"+getCacheId(id), new Gson().toJson(tmpData));
 				data = tmpData;
 			} else if (firstType == Type.NUMERIC && secondType == Type.LABEL) {
@@ -65,7 +63,6 @@ public class CompareProvider extends GlassDataProvider<CompareData> {
 				LabelNumericCompareData tmpData = new LabelNumericComparer().compare(labelColumn, numericColumn);
 				String tmpId = "compare-info-"+secondColumnName+"-"+firstColumnName+"-";
 				cacheManager.cache("LABEL_NUMERIC-"+getCacheId(tmpId), new Gson().toJson(tmpData));
-//				cacheManager.cache("LABEL_NUMERIC-"+getCacheId(id), new Gson().toJson(tmpData));
 				data = tmpData;
 			} else if (firstType == Type.NUMERIC && secondType == Type.NUMERIC) {
 				DoubleDataColumn firstColumn = (DoubleDataColumn) matrix.getDataColumn(firstColumnName);
