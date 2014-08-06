@@ -13,17 +13,21 @@ import com.infinity.glass.rest.data.DataProvider;
 import com.infinity.glass.rest.data.UiConfig;
 
 @Path("/uiconfig")
-public class UiConfigProvider {
+public class UiConfigProvider extends GlassDataProvider<UiConfig> {
 	
 	@GET
 	@Produces("application/json")
 	public Response getUiConfiguration(@Context ServletContext context) {
-		List<String> headings = new DataProvider().getHeaderData(context);
-		UiConfig conf = new UiConfig();
-		
-		conf.setHeaders(headings);
+		UiConfig conf = getCachedConfig("header-info-");
+
+		if (conf == null) {
+			conf = new UiConfig();
+			List<String> headings = new DataProvider().getHeaderData(context);
+			conf.setHeaders(headings);
+			cacheData(conf, "header-info-");
+		}
 		
 		return Response.ok().entity(conf).build();
 	}
-	
+
 }

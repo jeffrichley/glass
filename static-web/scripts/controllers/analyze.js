@@ -86,7 +86,7 @@ angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservi
 			
 			
 			
-			$('#charts').prepend(header + '<div id="'+fieldOne+'-'+fieldTwo+'-compare">'+progressBar+'</div><div></div>');
+			$('#charts').prepend(header + '<div class="result-chart-area" id="'+fieldOne+'-'+fieldTwo+'-compare">'+progressBar+'</div><div></div>');
 		
 			dataservice.compare(fieldOne, fieldTwo).then(function(data) {
 				// set up the data for the chart
@@ -200,7 +200,7 @@ angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservi
 				  				 '</div>';
 			   
 			   
-			   $('#charts').prepend(headerBar+'<div id="'+header+'-compare">'+progressBar+'</div>');
+			   $('#charts').prepend(headerBar+'<div class="result-chart-area" id="'+header+'-compare">'+progressBar+'</div>');
 			   dataservice.describe(header).then(function(data){
 				   var chartdataValues = [[data.title, 'Values']];
 				   

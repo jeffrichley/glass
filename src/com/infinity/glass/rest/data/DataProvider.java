@@ -16,8 +16,8 @@ import com.infinity.glass.rest.data.DataColumn.Type;
 
 public class DataProvider {
 
-	private static final String WEB_INF_DATA_XTRACT_CSV = "/WEB-INF/data-xtract.csv";
-
+	public static final String WEB_INF_DATA_XTRACT_CSV = "/WEB-INF/data-xtract.csv";
+	
 	public MatrixData getMatrixData(ServletContext context) {
 		return getMatrixData(context, WEB_INF_DATA_XTRACT_CSV);
 	}
@@ -44,7 +44,7 @@ public class DataProvider {
 			} catch (IOException e) {
 			}
 		}
-		
+	
 		return headers;
 	}
 	

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import com.infinity.glass.rest.data.CompareData;
 import com.infinity.glass.rest.data.DoubleDataColumn;
 import com.infinity.glass.rest.data.LabelNumericCompareData;
 import com.infinity.glass.rest.data.StatTuple;
@@ -17,7 +16,7 @@ import com.infinity.glass.rest.data.StringDataColumn;
 
 public class LabelNumericComparer {
 
-	public CompareData compare(StringDataColumn labelColumn, DoubleDataColumn numericColumn) {
+	public LabelNumericCompareData compare(StringDataColumn labelColumn, DoubleDataColumn numericColumn) {
 		LabelNumericCompareData data = new LabelNumericCompareData(labelColumn.getLabel(), numericColumn.getLabel());
 		data.setTitle(labelColumn.getLabel() + " vs. " + numericColumn.getLabel());
 		

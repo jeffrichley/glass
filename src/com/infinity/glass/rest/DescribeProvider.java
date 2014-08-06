@@ -14,23 +14,28 @@ import com.infinity.glass.rest.data.DescribeData;
 import com.infinity.glass.rest.data.MatrixData;
 
 @Path("/describe")
-public class DescribeProvider {
+public class DescribeProvider extends GlassDataProvider<DescribeData> {
 
 	@GET
 	@Produces("application/json")
 	@Path("/{fieldName}")
 	public DescribeData getDescribeData(@PathParam("fieldName")final String fieldName, @Context ServletContext context) {
-		MatrixData matrix = new DataProvider().getMatrixData(context);
-		DataColumn<?> dataColumn = matrix.getDataColumn(fieldName);
-		
-		DescribeData data = null;
-		if (dataColumn.getType() == Type.LABEL) {
-			data = new LabelDescriber().describe((DataColumn<String>) dataColumn);
-		} else {
-			data = new NumericDescriber().describe((DataColumn<Double>) dataColumn);
+		DescribeData data = getCachedConfig("describe-info-"+fieldName+"-");
+
+		if (data == null) {
+			MatrixData matrix = new DataProvider().getMatrixData(context);
+			DataColumn<?> dataColumn = matrix.getDataColumn(fieldName);
+			
+			if (dataColumn.getType() == Type.LABEL) {
+				data = new LabelDescriber().describe((DataColumn<String>) dataColumn);
+			} else {
+				data = new NumericDescriber().describe((DataColumn<Double>) dataColumn);
+			}
+			
+			data.setTitle(fieldName);
+			
+			cacheData(data, "describe-info-"+fieldName+"-");
 		}
-		
-		data.setTitle(fieldName);
 		
 		return data;
 	}

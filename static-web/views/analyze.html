@@ -6,7 +6,7 @@
 	</div>
 	<div ng-repeat="buttonName in headers" class="row select-button-row">
 		<div class="row">
-			<button ng-click="selectKey($index)" class="btn btn-plain btn-lg nsc-key-btn">
+			<button ng-click="selectKey($index)" class="btn btn-plain btn-lg nsc-key-btn" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">
 				<span ng-show="selectedKey == $index" class="glyphicon glyphicon-star"></span>
 				<span ng-hide="selectedKey == $index">&nbsp;</span>
 			</button>
