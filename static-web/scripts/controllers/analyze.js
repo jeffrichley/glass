@@ -14,7 +14,9 @@ angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservi
 	// setup data
 	dataservice.getUIFields().then(function(data) {
 		$scope.headers = data.headers;
+		// which buttons were selected
 		$scope.selectedHeaders = [];
+		// which button is the key to be compared to
 		$scope.selectedKey = null;
 		
 		$scope.buttonStyles = [];
@@ -32,6 +34,15 @@ angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservi
 					}
 				} else {
 					$scope.buttonStyles[i] = 'btn btn-lg btn-primary nsc-header-btn';
+					// if this was the key, we need to "unkey" it and make another key
+					if (i == $scope.selectedKey) {
+						$scope.selectedKey = null;
+						for (var i = 0; i < $scope.selectedHeaders.length && $scope.selectedKey == null; i++) {
+							if ($scope.selectedHeaders[i]) {
+								$scope.selectedKey = i;
+							}
+						}
+					}
 				}
 			} 
 		});
