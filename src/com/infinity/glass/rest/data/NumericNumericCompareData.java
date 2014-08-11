@@ -8,8 +8,8 @@ public class NumericNumericCompareData extends CompareData {
 	
 	private final List<XYTuple> points = new ArrayList<XYTuple>();
 	
-	public NumericNumericCompareData(String fieldOne, String fieldTwo) {
-		super(CompareType.NUMERIC_NUMERIC, fieldOne, fieldTwo);
+	public NumericNumericCompareData(String fieldOne, String fieldTwo, String requestUUID) {
+		super(CompareType.NUMERIC_NUMERIC, fieldOne, fieldTwo, requestUUID);
 	}
 
 	public void addPoint(XYTuple tuple) {

@@ -11,11 +11,14 @@ public class CompareData {
 	private final String fieldOne;
 	private final String fieldTwo;
 	private final CompareType compareType;
+	private double correlation = 0;
+	private final String requestUUID;
 
-	public CompareData(CompareType compareType, String fieldOne, String fieldTwo) {
+	public CompareData(CompareType compareType, String fieldOne, String fieldTwo, String requestUUID) {
 		this.compareType = compareType;
 		this.fieldOne = fieldOne;
 		this.fieldTwo = fieldTwo;
+		this.requestUUID = requestUUID;
 	}
 
 	public String getTitle() {
@@ -36,6 +39,18 @@ public class CompareData {
 
 	public String getFieldTwo() {
 		return fieldTwo;
+	}
+
+	public double getCorrelation() {
+		return correlation;
+	}
+
+	public void setCorrelation(double correlation) {
+		this.correlation = correlation;
+	}
+
+	public String getRequestUUID() {
+		return requestUUID;
 	}
 	
 }

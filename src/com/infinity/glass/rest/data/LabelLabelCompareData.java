@@ -10,8 +10,8 @@ public class LabelLabelCompareData extends CompareData {
 	private final List<String> columnLabels;
 	private final int[][] data;
 	
-	public LabelLabelCompareData(List<String> rowLabels, List<String> columnLabels, String fieldOne, String fieldTwo) {
-		super(CompareType.LABEL_LABEL, fieldOne, fieldTwo);
+	public LabelLabelCompareData(List<String> rowLabels, List<String> columnLabels, String fieldOne, String fieldTwo, String requestUUID) {
+		super(CompareType.LABEL_LABEL, fieldOne, fieldTwo, requestUUID);
 		
 		this.rowLabels = new ArrayList<String>(rowLabels);
 		this.columnLabels = new ArrayList<String>(columnLabels);

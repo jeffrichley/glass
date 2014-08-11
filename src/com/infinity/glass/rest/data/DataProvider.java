@@ -15,7 +15,6 @@ import javax.servlet.ServletContext;
 import com.infinity.glass.rest.data.DataColumn.Type;
 
 public class DataProvider {
-
 	public static final String WEB_INF_DATA_XTRACT_CSV = "/WEB-INF/data-xtract.csv";
 	
 	public MatrixData getMatrixData(ServletContext context) {
@@ -50,7 +49,6 @@ public class DataProvider {
 	
 	public MatrixData getMatrixData(ServletContext context, String dataFileName) {
 		MatrixData data = new MatrixData();
-		
 		LineNumberReader headersin = null;
 		String[] headers = null;
 		try {

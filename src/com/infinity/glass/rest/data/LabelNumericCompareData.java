@@ -8,8 +8,8 @@ public class LabelNumericCompareData extends CompareData {
 
 	private List<StatTuple> pairs = new ArrayList<StatTuple>();
 	
-	public LabelNumericCompareData(String fieldOne, String fieldTwo) {
-		super(CompareType.LABEL_NUMERIC, fieldOne, fieldTwo);
+	public LabelNumericCompareData(String fieldOne, String fieldTwo, String requestUUID) {
+		super(CompareType.LABEL_NUMERIC, fieldOne, fieldTwo, requestUUID);
 	}
 
 	public List<StatTuple> getPairs() {

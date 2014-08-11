@@ -7,9 +7,10 @@
  * # AnalyzeCtrl
  * Controller of the glassApp
  */
-angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservice) {
+angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservice, chartservice) {
 	
 	$scope.showInitialSplash = true;
+	$scope.activities = [];
 
 	// setup data
 	dataservice.getUIFields().then(function(data) {
@@ -66,125 +67,60 @@ angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservi
 		var fieldTwos = [];
 		for (var i = 0; i < $scope.selectedHeaders.length; i++) {
 			if ($scope.selectedHeaders[i] && i != $scope.selectedKey) {
-				fieldTwos.push($scope.headers[i]);
-//				if (fieldOne) {
-//					fieldTwo = $scope.headers[i];
-//				} else {
-//					fieldOne = $scope.headers[i];
-//				}
+				var uuid = dataservice.getUUID();
+				fieldTwos.push(
+					{
+						fieldTwo:$scope.headers[i],
+						uuid: uuid
+					}
+				);
+				
+				var activity = {
+					fieldOne: fieldOne,
+					fieldTwo: $scope.headers[i],
+					title: 'Comparing ' + fieldOne + ' vs. ' + $scope.headers[i],
+					data: null,
+					correlation: null,
+					id: uuid
+				};
+				
+				$scope.activities.unshift(activity);
 			}
 		}
 		
 		
 		for (var i = 0; i < fieldTwos.length; i++) {
-			
-			var fieldTwo = fieldTwos[i];
-
-			var header = '<div class="navbar navbar-default" role="navigation">' +
-		  			 '	<div class="container-fluid">' +
-		  			 '		<div class="navbar-header">' +
-		  			 '			<a class="navbar-brand" href="#">Comparing '+fieldOne+' vs. '+fieldTwo+'</a>' +
-		  			 '		</div>' +
-		  			 '	</div>' +
-		  			 '</div>';
+			var fieldTwo = fieldTwos[i].fieldTwo;
+			var uuid = fieldTwos[i].uuid;
 		
-			var progressBar = '<div class="progress">' +
-		  				  '	 <div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">' +
-		  				  '	   <span class="sr-only"></span>' +
-		  				  '  </div>' +
-		  				  '</div>';
-		
-			
-			
-			
-			$('#charts').prepend(header + '<div class="result-chart-area" id="'+fieldOne+'-'+fieldTwo+'-compare">'+progressBar+'</div><div></div>');
-		
-			dataservice.compare(fieldOne, fieldTwo).then(function(data) {
-				// set up the data for the chart
-				if (data.compareType == 'NUMERIC_NUMERIC') {
-					var chartDataValues = [];
-					chartDataValues.push([data.fieldOne, data.fieldTwo]);
-					for (var i = 0; i < data.points.length; i++) {
-						var pair = data.points[i];
-						var entry = [pair.x, pair.y];
-						chartDataValues.push(entry);
+			dataservice.compare(fieldOne, fieldTwo, uuid).then(function(data) {
+				var activity = null;
+				for (var i = 0; i < $scope.activities.length && activity == null; i++) {
+					var tmpActivity = $scope.activities[i];
+					if (tmpActivity.id == data.requestUUID) {
+						activity = tmpActivity;
 					}
-					var chartData = google.visualization.arrayToDataTable(chartDataValues);
-					var options = {
-							title: data.title,
-							hAxis: {title: data.fieldOne},
-							vAxis: {title: data.fieldTwo},
-							legend: 'none',
-							height: 400
-					};
-					var chart = new google.visualization.ScatterChart(document.getElementById(data.fieldOne+'-'+data.fieldTwo+'-compare'));
-					chart.draw(chartData, options);
-				} else if (data.compareType == 'LABEL_NUMERIC') {
-					var chartData = new google.visualization.DataTable();
-					chartData.addColumn('string', 'Entries');
-					chartData.addColumn('number', 'Sum');
-					chartData.addColumn('number', 'Count');
-					chartData.addColumn('number', 'Average');
-					chartData.addColumn('number', 'Median');
-					
-					var chartDataValues = [];
-					for (var i = 0; i < data.pairs.length; i++) {
-						var pair = data.pairs[i];
-						var entry = [pair.label, pair.sum, pair.count, pair.average, pair.median];
-						chartDataValues.push(entry);
-					}
-					chartData.addRows(chartDataValues);
-					
-					var options = {
-						showRowNumber: true
-					};
-					
-					var div = document.getElementById(data.fieldOne+'-'+data.fieldTwo+'-compare');
-					if (div == null) {
-						div = document.getElementById(data.fieldTwo+'-'+data.fieldOne+'-compare');
-					}
-					
-					// Google table doesn't support title
-	//				$(div).prepend('<div>'+data.title+'</div>');
-					
-					var table = new google.visualization.Table(div);
-			        table.draw(chartData, options);
-				} else if (data.compareType == 'LABEL_LABEL') {
-					var chartData = new google.visualization.DataTable();
-					chartData.addColumn('string', data.fieldOne);
-					for (var i = 0; i < data.columnLabels.length; i++) {
-						chartData.addColumn('number', data.columnLabels[i]);
-					}
-					
-					var chartDataValues = [];
-					for (var i = 0; i < data.rowLabels.length; i++) {
-						var entry = [data.rowLabels[i]];
-						for (var j = 0; j < data.columnLabels.length; j++) {
-							entry.push(data.data[i][j]);
-						}
-						chartDataValues.push(entry);
-					}
-					chartData.addRows(chartDataValues);
-					
-					var div = document.getElementById(data.fieldOne+'-'+data.fieldTwo+'-compare');
-					if (div == null) {
-						div = document.getElementById(data.fieldTwo+'-'+data.fieldOne+'-compare');
-					}
-					
-					var options = {
-						showRowNumber: true
-					};
-					
-					var table = new google.visualization.Table(div);
-			        table.draw(chartData, options);
 				}
-		});
-			
-			
-			
-			
-			
-			
+				activity.data = data;
+				activity.correlation = data.correlation;
+		
+				var cor = Math.abs(data.correlation);
+				var corMessage = null;
+				
+				var div = document.getElementById(data.requestUUID);
+				
+				if (data.compareType == 'NUMERIC_NUMERIC') {
+					corMessage = dataservice.getPearsonMessage(cor);
+					chartservice.drawScatterPlot(div, data);
+				} else if (data.compareType == 'LABEL_NUMERIC') {
+					corMessage = dataservice.getPValueMessage(cor);
+					chartservice.drawLabelNumericTable(div, data);
+				} else if (data.compareType == 'LABEL_LABEL') {
+					chartservice.drawLabelLabelTable(div, data);
+				}
+				
+				activity.correlationMsg = corMessage;
+			});
 		}
 	};
 	
@@ -203,7 +139,7 @@ angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservi
 	  			 '		</div>' +
 	  			 '	</div>' +
 	  			 '</div>';
-	
+			   
 			   var progressBar = '<div class="progress">' +
 				  				 '	 <div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">' +
 				  				 '	   <span class="sr-only"></span>' +

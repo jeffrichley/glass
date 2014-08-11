@@ -6,6 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
+import com.google.gson.Gson;
+import com.infinity.glass.rest.data.MatrixData;
+
 public class HomeDirCacheManager implements CacheManager {
 
 	@Override
@@ -75,6 +78,12 @@ public class HomeDirCacheManager implements CacheManager {
 			answer = buff.toString();
 		}
 		return answer;
+	}
+
+	@Override
+	public MatrixData getData(String id, Class<MatrixData> clazz) {
+		String data = getData(id);
+		return new Gson().fromJson(data, clazz);
 	}
 
 	
