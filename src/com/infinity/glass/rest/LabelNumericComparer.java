@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.infinity.glass.rest.data.DoubleDataColumn;
 import com.infinity.glass.rest.data.LabelNumericCompareData;
@@ -16,16 +19,28 @@ import com.infinity.glass.rest.data.StringDataColumn;
 import com.infinity.glass.rest.utils.StatsMath;
 
 public class LabelNumericComparer {
+	
+	private static Logger LOGGER = LoggerFactory.getLogger(LabelNumericComparer.class);
 
 	public LabelNumericCompareData compare(StringDataColumn labelColumn, DoubleDataColumn numericColumn, String requestUUID) {
 		LabelNumericCompareData data = new LabelNumericCompareData(labelColumn.getLabel(), numericColumn.getLabel(), requestUUID);
 		data.setTitle(labelColumn.getLabel() + " vs. " + numericColumn.getLabel());
 		
+		
+		Object[] labels = labelColumn.getRows().toArray();
+		Object[] values = numericColumn.getRows().toArray();
+		for(int i = 0; i < labels.length; i++) {
+			System.out.println(String.format("Row: %d: label: %s, value: %s", i, labels[i], values[i]));
+		}
+		
+		
+		
+		
 		Map<String, DescriptiveStatistics> statMap = new HashMap<String, DescriptiveStatistics>();
 		
 		for (int i = 0; i < labelColumn.getRows().size(); i++) {
 			String key = labelColumn.getRows().get(i);
-			if (key != null) {
+			if (StringUtils.isNotBlank(key)) {
 				Double value = numericColumn.getRows().get(i);
 				if (value != null) {
 					DescriptiveStatistics stat = statMap.get(key);
@@ -34,7 +49,11 @@ public class LabelNumericComparer {
 						statMap.put(key, stat);
 					}
 					stat.addValue(value);
+				} else {
+					LOGGER.info(String.format("Row: %d: label: %s, value: %s", i, labels[i], values[i]));
 				}
+			} else {
+				
 			}
 		}
 		

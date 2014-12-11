@@ -14,10 +14,11 @@ angular.module('glassApp')
 		var uiConfigURL = '/glass/rest/uiconfig';
 		var describeURL = '/glass/rest/describe/';
 		var compareURL = '/glass/rest/compare/';
+		var importURL = '/glass/rest/import/';
 
-		var svc = {};
-
-		svc.getPValueMessage = function(cor) {
+		var myFileName = '';
+		
+		this.getPValueMessage = function(cor) {
 			var msg = null;
 			
 			if (cor <= .01) {
@@ -33,7 +34,7 @@ angular.module('glassApp')
 			return msg;
 		};
 		
-		svc.getPearsonMessage = function(cor) {
+		this.getPearsonMessage = function(cor) {
 			var corMessage = null;
 			if (cor < .1) {
 				corMessage = 'There is no statistical correlation';
@@ -49,17 +50,17 @@ angular.module('glassApp')
 			return corMessage;
 		};
 		
-		svc.getUUID = function() {
+		this.getUUID = function() {
 			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 			    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 			    return v.toString(16);
 			});
 		};
 		
-		svc.getUIFields = function() {
+		this.getUIFields = function() {
 			var deferred = $q.defer();
-			
-			$http({method:'GET', url:uiConfigURL}).
+			var svcUrl = uiConfigURL + "/" + myFileName;
+			$http({method:'GET', url:svcUrl}).
 				success(function(data, status, headers, config) {
 					deferred.resolve(data);
 				}).
@@ -70,9 +71,15 @@ angular.module('glassApp')
 			return deferred.promise;
 		};
 		
-		svc.compare = function(fieldOne, fieldTwo, uuid) {
+		this.import = function(fileName) {
+			myFileName = fileName;						// save the name of the imported file
+			var svcUrl = uiConfigURL + "/" + fileName;
+			return $http({method:'GET', url:svcUrl});
+		};
+		
+		this.compare = function(fieldOne, fieldTwo, uuid) {
 			var deferred = $q.defer();
-			var url = compareURL + fieldOne + '/' + fieldTwo + '/' + uuid;
+			var url = compareURL + myFileName + '/' + fieldOne + '/' + fieldTwo + '/' + uuid;
 			$http({method:'GET', url:url}).
 				success(function(data, status, headers, config) {
 					deferred.resolve(data);
@@ -84,9 +91,9 @@ angular.module('glassApp')
 			return deferred.promise;
 		};
 		
-		svc.describe = function(field) {
+		this.describe = function(field) {
 			var deferred = $q.defer();
-			var url = describeURL + field;
+			var url = describeURL + myFileName + '/' + field;
 			$http({method:'GET', url:url}).
 				success(function(data, status, headers, config) {
 					deferred.resolve(data);
@@ -97,6 +104,4 @@ angular.module('glassApp')
 
 			return deferred.promise;
 		};
-		
-		return svc;
 	});

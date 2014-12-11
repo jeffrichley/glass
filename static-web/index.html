@@ -55,6 +55,7 @@
         <ul class="nav nav-pills pull-right">
           <li><a ng-href="#">Home</a></li>
           <li><a ng-href="#/analyze">Analyze</a></li>
+          <li class='glyphicon-upload'><a ng-href="#/upload">Upload</a></li>
           <li><a ng-href="#/about">About</a></li>
         </ul>
         <h3 class="text-muted">Glass</h3>
@@ -82,7 +83,9 @@
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/angular-file-upload/angular-file-upload-shim.js"></script> 
     <script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-file-upload/angular-file-upload.js"></script> 
     <script src="bower_components/json3/lib/json3.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/bootstrap/js/tooltip.js"></script>
@@ -93,6 +96,7 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/ui-bootstrap/ui-bootstrap-0.11.0.js"></script>
+    <script src="bower_components/ui-bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
     
     <!-- endbower -->
     <!-- endbuild -->
@@ -102,6 +106,7 @@
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/analyze.js"></script>
+        <script src="scripts/controllers/datasets.js"></script>
         <script src="scripts/services/dataservice.js"></script>
         <script src="scripts/services/chartservice.js"></script>
         <!-- endbuild -->

@@ -2,14 +2,16 @@ package com.infinity.glass.rest;
 
 import java.lang.reflect.ParameterizedType;
 
+import javax.servlet.ServletContext;
+
 import com.google.gson.Gson;
+import com.infinity.glass.manager.ManagerFactory;
 import com.infinity.glass.rest.data.DataProvider;
 import com.infinity.glass.rest.utils.CacheManager;
-import com.infinity.glass.rest.utils.HomeDirCacheManager;
 
 public class GlassDataProvider<T> {
 
-	private final CacheManager cacheManager = new HomeDirCacheManager();
+	private final CacheManager cacheManager = ManagerFactory.getCacheManager();
 	
 	protected String getCacheId(String id) {
 		int start = DataProvider.WEB_INF_DATA_XTRACT_CSV.lastIndexOf("\\");
@@ -19,6 +21,18 @@ public class GlassDataProvider<T> {
 		return id+DataProvider.WEB_INF_DATA_XTRACT_CSV.substring(start+1);
 	}
 
+	protected String getCacheId(final String key, final String id) {
+		return key.concat(id);
+	}
+
+	protected String getDataFilePath(final ServletContext context, final String token) {
+		final String fileSep = System.getProperty("file.separator");
+		final String dataDir = (String) context.getAttribute("FSDatasetManager.temp.dir");
+		final String dataFileName = String.format("%s%s%s%s", dataDir, fileSep, token,
+				token.endsWith(".csv") ? "" : ".csv");
+		return dataFileName;
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected T getCachedConfig(String id) {
 		String cacheId = getCacheId(id);
@@ -34,8 +48,27 @@ public class GlassDataProvider<T> {
 		return answer;
 	}
 	
+	@SuppressWarnings("unchecked")
+	protected T getCachedConfig(final String key, String id) {
+		String cacheId = getCacheId(key, id);
+		String cachedData = cacheManager.getData(cacheId);
+		
+		T answer = null;
+		if (cachedData != null) {
+			Class<T> genericClass = (Class<T>) ((ParameterizedType) getClass()
+                    				.getGenericSuperclass()).getActualTypeArguments()[0];
+			answer = (T) new Gson().fromJson(cachedData, genericClass);
+		}
+		
+		return answer;
+	}
+	
 	protected void cacheData(T data, String id) {
 		cacheManager.cache(getCacheId(id), new Gson().toJson(data));		
+	}
+
+	protected void cacheData(T data, String key, final String id) {
+		cacheManager.cache(getCacheId(key, id), new Gson().toJson(data));		
 	}
 
 }

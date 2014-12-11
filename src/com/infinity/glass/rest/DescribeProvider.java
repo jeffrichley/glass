@@ -1,6 +1,8 @@
 package com.infinity.glass.rest;
 
+import javax.resource.spi.IllegalStateException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -8,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
 import com.infinity.glass.config.ConfigurationUtils;
+import com.infinity.glass.manager.ManagerFactory;
 import com.infinity.glass.rest.data.DataColumn;
 import com.infinity.glass.rest.data.DataColumn.Type;
 import com.infinity.glass.rest.data.DataProvider;
@@ -31,25 +34,32 @@ public class DescribeProvider extends GlassDataProvider<DescribeData> {
 	 */
 	@GET
 	@Produces("application/json")
-	@Path("/{fieldName}")
-	public DescribeData getDescribeData(@PathParam("fieldName")final String fieldName, @Context ServletContext context) {
-		DescribeData data = getCachedConfig("describe-info-"+fieldName+"-");
+	@Path("/{fileName}/{fieldName}")
+	public DescribeData getDescribeData(@PathParam("fileName")final String fileName, @PathParam("fieldName")final String fieldName, 
+			@Context ServletContext context, @Context HttpServletRequest req) {
+		DescribeData data = getCachedConfig("describe-info-"+fieldName+"-", fileName);
 		
 		if (data == null) {
-			MatrixData matrix = new DataProvider().getMatrixData(context);
-			DataColumn<?> dataColumn = matrix.getDataColumn(fieldName);
-			
-			if (dataColumn.getType() == Type.LABEL) {
-				LabelDescriber labelDescriber = ConfigurationUtils.getLabelDescriber();
-				data = labelDescriber.describe((DataColumn<String>) dataColumn);
-			} else {
-				NumericDescriber numericDescriber = ConfigurationUtils.getNumericDescriber();
-				data = numericDescriber.describe((DataColumn<Double>) dataColumn);
+			MatrixData matrix;
+			try {
+				matrix = ManagerFactory.getDatasetManager(context).getMatrixData(fileName);
+				DataColumn<?> dataColumn = matrix.getDataColumn(fieldName);
+				
+				if (dataColumn.getType() == Type.LABEL) {
+					LabelDescriber labelDescriber = ConfigurationUtils.getLabelDescriber();
+					data = labelDescriber.describe((DataColumn<String>) dataColumn);
+				} else {
+					NumericDescriber numericDescriber = ConfigurationUtils.getNumericDescriber();
+					data = numericDescriber.describe((DataColumn<Double>) dataColumn);
+				}
+				
+				data.setTitle(fieldName);
+				
+				cacheData(data, "describe-info-"+fieldName+"-", fileName);
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			data.setTitle(fieldName);
-			
-			cacheData(data, "describe-info-"+fieldName+"-");
 		}
 		
 		return data;

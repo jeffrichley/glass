@@ -11,6 +11,17 @@ import com.infinity.glass.rest.data.MatrixData;
 
 public class HomeDirCacheManager implements CacheManager {
 
+	private static HomeDirCacheManager instance = null;
+	
+	private HomeDirCacheManager() {}
+	
+	public static CacheManager getInstance() {
+		if(instance == null) {
+			instance = new HomeDirCacheManager();
+		}
+		return instance;
+	}
+	
 	@Override
 	public void cache(String id, String data) {
 		

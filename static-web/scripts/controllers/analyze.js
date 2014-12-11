@@ -7,7 +7,8 @@
  * # AnalyzeCtrl
  * Controller of the glassApp
  */
-angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservice, chartservice) {
+angular.module('glassApp').controller('AnalyzeCtrl', ['$scope', 'dataservice', 'chartservice',
+		function ($scope, dataservice, chartservice) {
 	
 	$scope.showInitialSplash = true;
 	$scope.activities = [];
@@ -211,4 +212,4 @@ angular.module('glassApp').controller('AnalyzeCtrl', function ($scope, dataservi
 		}
 	}, true);
 	
-});
+}]);

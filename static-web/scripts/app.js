@@ -16,6 +16,7 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
+    'angularFileUpload',
     'ui.bootstrap'
   ])
   .config(function ($routeProvider) {
@@ -31,6 +32,14 @@ angular
       .when('/analyze', {
         templateUrl: 'views/analyze.html',
         controller: 'AnalyzeCtrl'
+      })
+      .when('/upload', {
+        templateUrl: 'views/datasets.html',
+        controller: 'DatasetCtrl'
+      })
+      .when('/:fileId', {
+    	  templateUrl: 'views/main.html',
+    	  controller: 'MainCtrl'
       })
       .otherwise({
         redirectTo: '/'
