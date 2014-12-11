@@ -1,0 +1,32 @@
+<div ng-controller="DatasetCtrl">
+
+	<div ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="optional-css-class-name-or-function"
+		ng-show="dropSupported">
+		
+		<div>
+			<h4>Paste text here:</h4>
+			<label ></label>
+			<textarea ng-model="pastedText" ng-minlength="" ng-maxlength=""></textarea>
+			<div class="col-md-6">
+				<button type="button" class="btn btn-info" ng-click="onSubmitText()">Submit</button>
+			</div>
+    	</div>
+		<hr />
+		<div>
+			<h4>Or choose file here:</h4>
+			<input type="file" ng-file-select="onFileSelect($files)">
+				<p>Or, drop files here</p>
+			</input>
+		</div>
+		<!-- input type="text" ng-model="myModelObj" -->
+		
+	</div>
+	<div ng-file-drop-available="dropSupported=true" ng-show="!dropSupported">
+		HTML5 Drop File is not supported!
+	</div>
+	
+	<div ng-show='resultValid'>
+		Returned dataset id: {{datasetId}} 
+		<button type="button" class="btn btn-info glyphicon-icon-search" ng-click="onVisualize()">Visualize</button>
+	</div>
+</div>
