@@ -13,7 +13,6 @@ import com.infinity.glass.config.ConfigurationUtils;
 import com.infinity.glass.manager.ManagerFactory;
 import com.infinity.glass.rest.data.DataColumn;
 import com.infinity.glass.rest.data.DataColumn.Type;
-import com.infinity.glass.rest.data.DataProvider;
 import com.infinity.glass.rest.data.DescribeData;
 import com.infinity.glass.rest.data.MatrixData;
 

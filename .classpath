@@ -17,6 +17,5 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/glass-api"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

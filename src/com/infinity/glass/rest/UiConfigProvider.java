@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response.Status;
 
 import com.infinity.glass.manager.DatasetManager;
 import com.infinity.glass.manager.ManagerFactory;
-import com.infinity.glass.model.UserDatasetBean;
 import com.infinity.glass.model.UserIdentity;
 import com.infinity.glass.rest.data.DataProvider;
 import com.infinity.glass.rest.data.UiConfig;
