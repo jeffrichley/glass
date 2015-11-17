@@ -17,13 +17,14 @@ angular.module('glassApp')
     $scope.isImport = false;
     $scope.type = 'success';
     $scope.dataFileName = '';
+    
     var fileId = $routeParams.fileId;
+
     if(angular.isDefined(fileId)) {
     	$scope.isImport = true;
     	$scope.dataFileName = fileId;
-    	if(window.console) {
-    		console.log('fileId: ', fileId);
-    	}
+
+    	console.log('fileId: ', fileId);
 
     	dataservice.import(fileId).then(
     			function(payload) {

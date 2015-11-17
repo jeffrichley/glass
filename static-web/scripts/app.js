@@ -29,7 +29,7 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
-      .when('/analyze', {
+      .when('/analyze/:fileName', {
         templateUrl: 'views/analyze.html',
         controller: 'AnalyzeCtrl'
       })

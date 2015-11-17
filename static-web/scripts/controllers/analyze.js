@@ -7,14 +7,16 @@
  * # AnalyzeCtrl
  * Controller of the glassApp
  */
-angular.module('glassApp').controller('AnalyzeCtrl', ['$scope', 'dataservice', 'chartservice',
-		function ($scope, dataservice, chartservice) {
+angular.module('glassApp').controller('AnalyzeCtrl', ['$scope', 'dataservice', 'chartservice', '$routeParams',
+		function ($scope, dataservice, chartservice, $routeParams) {
+
+	$scope.fileName = $routeParams.fileName;
 	
 	$scope.showInitialSplash = true;
 	$scope.activities = [];
 
 	// setup data
-	dataservice.getUIFields().then(function(data) {
+	dataservice.getUIFields($scope.fileName).then(function(data) {
 		$scope.headers = data.headers;
 		// which buttons were selected
 		$scope.selectedHeaders = [];

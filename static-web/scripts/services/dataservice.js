@@ -57,7 +57,8 @@ angular.module('glassApp')
 			});
 		};
 		
-		this.getUIFields = function() {
+		this.getUIFields = function(fileName) {
+			myFileName = fileName;
 			var deferred = $q.defer();
 			var svcUrl = uiConfigURL + "/" + myFileName;
 			$http({method:'GET', url:svcUrl}).
@@ -72,6 +73,7 @@ angular.module('glassApp')
 		};
 		
 		this.import = function(fileName) {
+			console.log("import");
 			myFileName = fileName;						// save the name of the imported file
 			var svcUrl = uiConfigURL + "/" + fileName;
 			return $http({method:'GET', url:svcUrl});
