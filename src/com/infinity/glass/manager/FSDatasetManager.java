@@ -42,9 +42,11 @@ public class FSDatasetManager extends AbstractManager implements DatasetManager 
 	private final String DATA_DIR;
 	private final String TEMP_DIR;
 	private final CacheManager cacheManager;
+	private final DataPreProcessor dataPreProcessor;
 
 	@Inject
-	public FSDatasetManager(CacheManager cacheManager, @Named("DATA_DIR") String dataDir, @Named("TEMP_DIR") String tmpDir) {
+	public FSDatasetManager(CacheManager cacheManager, DataPreProcessor dataPreProcessor,
+							@Named("DATA_DIR") String dataDir, @Named("TEMP_DIR") String tmpDir) {
 		super();
 		
 		this.cacheManager = cacheManager;
@@ -52,6 +54,7 @@ public class FSDatasetManager extends AbstractManager implements DatasetManager 
 //		TEMP_DIR = (String) context.getAttribute("FSDatasetManager.temp.dir");
 		DATA_DIR = dataDir;
 		TEMP_DIR = tmpDir;
+		this.dataPreProcessor = dataPreProcessor;
 	}
 	
 	private String getDatasetPath(final String datasetId) {
@@ -120,11 +123,16 @@ public class FSDatasetManager extends AbstractManager implements DatasetManager 
 //	public UserDatasetBean importDataset(UserIdentity userIdentity, String datasetId) {
 	public UserDatasetBean importDataset(String datasetId) {
 //		CacheManager cacheManager = ManagerFactory.getCacheManager(); 
-		final String dataFileName = getDatasetPath(datasetId);
-		File dataFile = new File(dataFileName);
-		DataProvider dp = new DataProvider();
+//		final String dataFileName = getDatasetPath(datasetId);
+//		File dataFile = new File(dataFileName);
+//		DataProvider dp = new DataProvider();
 		UiConfig conf = new UiConfig();
-		List<String> headings = dp.getHeaderData(dataFile);
+		
+		
+		List<String> headings = getMatrixData(datasetId).getHeadings();
+		
+		
+//		List<String> headings = dp.getHeaderData(dataFile);
 		conf.setHeaders(headings);
 		cacheManager.cache("header-info-" + datasetId,  new Gson().toJson(conf));
 		return null;
@@ -147,26 +155,39 @@ public class FSDatasetManager extends AbstractManager implements DatasetManager 
 		final String inputDataPath = getDatasetPath(datasetId);
 		MatrixData data = null;
 		File matrixFile, dataFile;
+		InputStream in = null;
+		ObjectInput oi = null;
 		try {
 			matrixFile = new File(matrixDataPath);
 			dataFile = new File(inputDataPath);
 			if(matrixFile.exists() && matrixFile.canRead() && !isNewer(dataFile, matrixFile)) {
-				InputStream in = new FileInputStream(matrixFile);
-				ObjectInput oi = new ObjectInputStream(in);
+				in = new FileInputStream(matrixFile);
+				oi = new ObjectInputStream(in);
 				data = (MatrixData) oi.readObject();
 				oi.close();
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
+			if (oi != null) {
+				try {
+					oi.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return data;
 	}
@@ -185,20 +206,34 @@ public class FSDatasetManager extends AbstractManager implements DatasetManager 
 
 	private void writeMatrixData(final String datasetId, final MatrixData md) {
 		final String matrixDataPath = getMatrixCachePath(datasetId); 
-		File file;
+		OutputStream out = null;
+		ObjectOutput os = null;
 		try {
-			file = new File(matrixDataPath);
-			OutputStream out = new FileOutputStream(file);
-			ObjectOutput os = new ObjectOutputStream(out);
+			File file = new File(matrixDataPath);
+			out = new FileOutputStream(file);
+			os = new ObjectOutputStream(out);
 			os.writeObject(md);
-			os.close();
-			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
+			if (os != null) {
+				try {
+					os.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-
+		
+		dataPreProcessor.preProcessMatrixData(md, datasetId);
 	}
 
 }

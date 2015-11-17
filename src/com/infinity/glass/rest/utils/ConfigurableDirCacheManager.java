@@ -9,29 +9,30 @@ import java.io.LineNumberReader;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.infinity.glass.manager.CacheCleaner;
 import com.infinity.glass.rest.data.MatrixData;
 
 public class ConfigurableDirCacheManager implements CacheManager {
 
 	private final String cacheDirectory;
+	private final CacheCleaner cacheCleaner;
 
 	@Inject
-	public ConfigurableDirCacheManager(@Named("Cache-Directory") String cacheDirectory) {
-		
+	public ConfigurableDirCacheManager(@Named("Cache-Directory") String cacheDirectory, CacheCleaner cacheCleaner) {
 		if (!cacheDirectory.endsWith("/") || !cacheDirectory.endsWith("\\")) {
 			cacheDirectory += "/";
 		}
 		
 		this.cacheDirectory = cacheDirectory;
+		this.cacheCleaner = cacheCleaner;
 	}
 	
 	public static CacheManager getInstance() {
-		return new ConfigurableDirCacheManager(System.getProperty("user.home") + "/.glass-cache/");
+		return new ConfigurableDirCacheManager(System.getProperty("user.home") + "/.glass-cache/", null);
 	}
 	
 	@Override
 	public void cache(String id, String data) {
-		
 		FileWriter out = null;
 		String fileName = getFileName(id);
 		
@@ -49,12 +50,16 @@ public class ConfigurableDirCacheManager implements CacheManager {
 					throw new RuntimeException("Unable to save " + fileName, e);
 				}
 			}
+			
+			// oh by the way, make sure to clean stuff up periodically
+			if (cacheCleaner != null) {
+				cacheCleaner.cleanCache();
+			}
 		}
 	}
 
 	private String getFileName(String id) {
 		String fileName;
-//		String cacheDir = System.getProperty("user.home") + "/.glass-cache/";
 		String cacheDir = cacheDirectory;
 		new File(cacheDir).mkdirs();
 		fileName = cacheDir + id + ".txt";

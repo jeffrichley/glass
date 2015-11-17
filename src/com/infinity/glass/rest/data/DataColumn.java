@@ -8,9 +8,6 @@ import java.util.List;
 
 public abstract class DataColumn<T> implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
