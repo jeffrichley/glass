@@ -1,4 +1,6 @@
 <jboss-web>
+<!-- 
    <security-domain>java:/jaas/sam</security-domain>
    <context-root>/glass</context-root>
+ -->
 </jboss-web>
