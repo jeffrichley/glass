@@ -21,9 +21,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.infinity.glass.config.ConfigurationUtils;
 import com.infinity.glass.manager.DatasetManager;
 import com.infinity.glass.manager.IdentityManager;
-import com.infinity.glass.manager.ManagerFactory;
 import com.infinity.glass.model.UserDatasetBean;
 import com.infinity.glass.model.UserIdentity;
 
@@ -50,9 +50,9 @@ public class FileUploadServlet extends HttpServlet {
 		UserDatasetBean dsb = null;
 		try {
 			ServletContext context = request.getServletContext();
-			IdentityManager uim = ManagerFactory.getUserIdentityManager(context);
+			IdentityManager uim = ConfigurationUtils.getUserIdentityManager();
 			UserIdentity userIdentity = uim.getUserIdentity(request);			
-			DatasetManager dsm = ManagerFactory.getDatasetManager(context);
+			DatasetManager dsm = ConfigurationUtils.getDatasetManager();
 
 			StringBuilder sb = new StringBuilder("{\"result\": [");
 			ByteArrayOutputStream uploadedData = new ByteArrayOutputStream();

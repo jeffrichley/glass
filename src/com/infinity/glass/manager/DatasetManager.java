@@ -20,6 +20,7 @@ public interface DatasetManager {
 	DatasetSummaryBean getDatasetsForUser(final UserIdentity userId);
 	UserDatasetBean saveDataset(UserIdentity userIdentity, String origFileName, InputStream stream) throws IOException;
 	void LoadDataset(final String userId, final String datasetId, OutputStream stream) throws IOException;
-	UserDatasetBean importDataset(final UserIdentity userIdentity, final String datasetId);
+//	UserDatasetBean importDataset(final UserIdentity userIdentity, final String datasetId);
+	UserDatasetBean importDataset(final String datasetId);
 	MatrixData getMatrixData(final String datasetId);
 }

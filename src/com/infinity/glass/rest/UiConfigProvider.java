@@ -14,9 +14,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.infinity.glass.config.ConfigurationUtils;
 import com.infinity.glass.manager.DatasetManager;
-import com.infinity.glass.manager.ManagerFactory;
-import com.infinity.glass.model.UserIdentity;
 import com.infinity.glass.rest.data.DataProvider;
 import com.infinity.glass.rest.data.UiConfig;
 
@@ -46,10 +45,14 @@ public class UiConfigProvider extends GlassDataProvider<UiConfig> {
 			@Context HttpServletRequest req) {
 		HttpSession sess = req.getSession(true);
 		try {
-			UserIdentity ui = ManagerFactory.getUserIdentityManager(context).getUserIdentity(req);
-			DatasetManager dsm = ManagerFactory.getDatasetManager(context);
-			dsm.importDataset(ui, fileId);
 			UiConfig conf = getCachedConfig("header-info-", fileId);
+
+			if (conf == null) {
+				DatasetManager dsm = ConfigurationUtils.getDatasetManager();
+				dsm.importDataset(fileId);
+				conf = getCachedConfig("header-info-", fileId);
+			}
+				
 			if (conf == null) {
 				throw new IllegalStateException("Failed to import CSV file!");
 			}

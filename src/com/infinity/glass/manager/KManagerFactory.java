@@ -6,18 +6,17 @@ package com.infinity.glass.manager;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.resource.spi.IllegalStateException;
 import javax.servlet.ServletContext;
 
 import com.infinity.glass.rest.utils.CacheManager;
-import com.infinity.glass.rest.utils.HomeDirCacheManager;
+import com.infinity.glass.rest.utils.ConfigurableDirCacheManager;
 
 /**
  * @author kerry.baumer
  *
  */
 @SuppressWarnings("unchecked")
-public final class ManagerFactory {
+public final class KManagerFactory {
 
 	public static String DEFAULT_DSM_CLASS = "com.infinity.glass.manager.FauxDatasetManager";
 	public static String DEFAULT_UIM_CLASS = "com.infinity.glass.manager.FauxUserIdentityManager";
@@ -26,12 +25,12 @@ public final class ManagerFactory {
 	/**
 	 * Factory methods, no do not instantiate!
 	 */
-	private ManagerFactory() {
+	private KManagerFactory() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	public static CacheManager getCacheManager() {
-		return HomeDirCacheManager.getInstance();
+		return ConfigurableDirCacheManager.getInstance();
 	}
 	
 	public static DatasetManager getDatasetManager(ServletContext context) throws IllegalStateException {

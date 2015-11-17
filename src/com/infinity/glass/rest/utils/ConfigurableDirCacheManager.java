@@ -7,19 +7,26 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 
 import com.google.gson.Gson;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.infinity.glass.rest.data.MatrixData;
 
-public class HomeDirCacheManager implements CacheManager {
+public class ConfigurableDirCacheManager implements CacheManager {
 
-	private static HomeDirCacheManager instance = null;
-	
-	private HomeDirCacheManager() {}
+	private final String cacheDirectory;
+
+	@Inject
+	public ConfigurableDirCacheManager(@Named("Cache-Directory") String cacheDirectory) {
+		
+		if (!cacheDirectory.endsWith("/") || !cacheDirectory.endsWith("\\")) {
+			cacheDirectory += "/";
+		}
+		
+		this.cacheDirectory = cacheDirectory;
+	}
 	
 	public static CacheManager getInstance() {
-		if(instance == null) {
-			instance = new HomeDirCacheManager();
-		}
-		return instance;
+		return new ConfigurableDirCacheManager(System.getProperty("user.home") + "/.glass-cache/");
 	}
 	
 	@Override
@@ -47,7 +54,8 @@ public class HomeDirCacheManager implements CacheManager {
 
 	private String getFileName(String id) {
 		String fileName;
-		String cacheDir = System.getProperty("user.home") + "/.glass-cache/";
+//		String cacheDir = System.getProperty("user.home") + "/.glass-cache/";
+		String cacheDir = cacheDirectory;
 		new File(cacheDir).mkdirs();
 		fileName = cacheDir + id + ".txt";
 		return fileName;

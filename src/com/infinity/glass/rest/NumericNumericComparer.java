@@ -18,10 +18,12 @@ public class NumericNumericComparer {
 		
 		for (int i = 0; i < oneRows.size(); i++) {
 			Double xVal = oneRows.get(i);
-			Double yVal = twoRows.get(i);
-			if (xVal != null && yVal != null) {
-				XYTuple tuple = new XYTuple(xVal, yVal);
-				data.addPoint(tuple);
+			if (i < twoRows.size()) {
+				Double yVal = twoRows.get(i);
+				if (xVal != null && yVal != null) {
+					XYTuple tuple = new XYTuple(xVal, yVal);
+					data.addPoint(tuple);
+				}
 			}
 		}
 		

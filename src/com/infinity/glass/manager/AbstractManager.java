@@ -11,9 +11,9 @@ import javax.servlet.ServletContext;
  */
 public class AbstractManager {
 
-	protected final ServletContext context;
+//	protected final ServletContext context;
 	
-	public AbstractManager(ServletContext context) {
-		this.context = context;
-	}
+//	public AbstractManager(ServletContext context) {
+//		this.context = context;
+//	}
 }

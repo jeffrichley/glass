@@ -1,6 +1,5 @@
 package com.infinity.glass.rest;
 
-import javax.resource.spi.IllegalStateException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -10,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
 import com.infinity.glass.config.ConfigurationUtils;
-import com.infinity.glass.manager.ManagerFactory;
+import com.infinity.glass.manager.DatasetManager;
 import com.infinity.glass.rest.data.DataColumn;
 import com.infinity.glass.rest.data.DataColumn.Type;
 import com.infinity.glass.rest.data.DescribeData;
@@ -40,25 +39,21 @@ public class DescribeProvider extends GlassDataProvider<DescribeData> {
 		
 		if (data == null) {
 			MatrixData matrix;
-			try {
-				matrix = ManagerFactory.getDatasetManager(context).getMatrixData(fileName);
-				DataColumn<?> dataColumn = matrix.getDataColumn(fieldName);
-				
-				if (dataColumn.getType() == Type.LABEL) {
-					LabelDescriber labelDescriber = ConfigurationUtils.getLabelDescriber();
-					data = labelDescriber.describe((DataColumn<String>) dataColumn);
-				} else {
-					NumericDescriber numericDescriber = ConfigurationUtils.getNumericDescriber();
-					data = numericDescriber.describe((DataColumn<Double>) dataColumn);
-				}
-				
-				data.setTitle(fieldName);
-				
-				cacheData(data, "describe-info-"+fieldName+"-", fileName);
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			DatasetManager datasetManager = ConfigurationUtils.getDatasetManager();
+			matrix = datasetManager.getMatrixData(fileName);
+			DataColumn<?> dataColumn = matrix.getDataColumn(fieldName);
+			
+			if (dataColumn.getType() == Type.LABEL) {
+				LabelDescriber labelDescriber = ConfigurationUtils.getLabelDescriber();
+				data = labelDescriber.describe((DataColumn<String>) dataColumn);
+			} else {
+				NumericDescriber numericDescriber = ConfigurationUtils.getNumericDescriber();
+				data = numericDescriber.describe((DataColumn<Double>) dataColumn);
 			}
+			
+			data.setTitle(fieldName);
+			
+			cacheData(data, "describe-info-"+fieldName+"-", fileName);
 		}
 		
 		return data;

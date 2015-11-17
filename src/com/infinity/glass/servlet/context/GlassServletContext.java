@@ -15,7 +15,8 @@ import javax.servlet.ServletContextListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.infinity.glass.manager.ManagerFactory;
+import com.infinity.glass.config.ConfigurationUtils;
+import com.infinity.glass.manager.KManagerFactory;
 import com.infinity.glass.rest.utils.CacheManager;
 
 
@@ -60,7 +61,7 @@ public final class GlassServletContext implements ServletContextListener {
     			LOGGER.error("IOException loading properties file: " + e.getMessage() + ". Using defaults.");
             	loadDefaults();
     		} finally {
-    			final CacheManager cacheManager = ManagerFactory.getCacheManager();
+    			final CacheManager cacheManager = ConfigurationUtils.getCacheManager();
     			context.setAttribute("CACHE_MANAGER", cacheManager);
     			try {
     				if (fis != null) {
@@ -75,9 +76,9 @@ public final class GlassServletContext implements ServletContextListener {
     }
     
     private void loadDefaults() {
-    	context.setAttribute("DSM_CLASS", ManagerFactory.DEFAULT_DSM_CLASS);
-    	context.setAttribute("UIM_CLASS", ManagerFactory.DEFAULT_UIM_CLASS);
-    	context.setAttribute("UPM_CLASS", ManagerFactory.DEFAULT_UPM_CLASS);
+    	context.setAttribute("DSM_CLASS", KManagerFactory.DEFAULT_DSM_CLASS);
+    	context.setAttribute("UIM_CLASS", KManagerFactory.DEFAULT_UIM_CLASS);
+    	context.setAttribute("UPM_CLASS", KManagerFactory.DEFAULT_UPM_CLASS);
     }
     
     public void contextDestroyed(ServletContextEvent contextEvent) {

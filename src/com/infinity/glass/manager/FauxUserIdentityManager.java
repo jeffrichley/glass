@@ -18,8 +18,8 @@ import com.infinity.glass.model.UserIdentity;
  */
 public class FauxUserIdentityManager extends AbstractManager implements IdentityManager {
 	
-	public FauxUserIdentityManager(ServletContext context) {
-		super(context);
+	public FauxUserIdentityManager() {
+		super();
 	}
 
 	/* (non-Javadoc)
@@ -27,25 +27,26 @@ public class FauxUserIdentityManager extends AbstractManager implements Identity
 	 */
 	@Override
 	public UserIdentity getUserIdentity(HttpServletRequest req) throws IllegalStateException {
-		UserPersistence up;
-		UserIdentity ui = null;
-		try {
-			up = ManagerFactory.getUserPersistenceManager(context);
-			HttpSession session = req.getSession();
-			ui = (UserIdentity)session.getAttribute("glass.user.identity");
-			if(ui == null) {
-				if(req.isUserInRole("GUEST")) {
-					ui = createGuestIdentity();
-					session.setAttribute("glass.user.identity", ui);
-				} else {
-					ui = up.retrieve(req.getUserPrincipal().getName());
-					session.setAttribute("glass.user.identity", ui);
-				}
-			}
-		} catch (javax.resource.spi.IllegalStateException e) {
-			throw new IllegalStateException(e);
-		}
-		return ui;
+//		UserPersistence up;
+//		UserIdentity ui = null;
+//		try {
+//			up = ManagerFactory.getUserPersistenceManager(context);
+//			HttpSession session = req.getSession();
+//			ui = (UserIdentity)session.getAttribute("glass.user.identity");
+//			if(ui == null) {
+//				if(req.isUserInRole("GUEST")) {
+//					ui = createGuestIdentity();
+//					session.setAttribute("glass.user.identity", ui);
+//				} else {
+//					ui = up.retrieve(req.getUserPrincipal().getName());
+//					session.setAttribute("glass.user.identity", ui);
+//				}
+//			}
+//		} catch (IllegalStateException e) {
+//			throw new IllegalStateException(e);
+//		}
+//		return ui;
+		return null;
 	}
 	
 	private UserIdentity createGuestIdentity() {

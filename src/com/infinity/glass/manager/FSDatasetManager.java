@@ -21,9 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
-
 import com.google.gson.Gson;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.infinity.glass.model.DatasetSummaryBean;
 import com.infinity.glass.model.UserDatasetBean;
 import com.infinity.glass.model.UserIdentity;
@@ -41,14 +41,17 @@ public class FSDatasetManager extends AbstractManager implements DatasetManager 
 	private static String FILE_SEP = System.getProperty("file.separator");
 	private final String DATA_DIR;
 	private final String TEMP_DIR;
+	private final CacheManager cacheManager;
 
-	/**
-	 * 
-	 */
-	public FSDatasetManager(ServletContext context) {
-		super(context);
-		DATA_DIR = (String) context.getAttribute("FSDatasetManager.data.dir");
-		TEMP_DIR = (String) context.getAttribute("FSDatasetManager.temp.dir");
+	@Inject
+	public FSDatasetManager(CacheManager cacheManager, @Named("DATA_DIR") String dataDir, @Named("TEMP_DIR") String tmpDir) {
+		super();
+		
+		this.cacheManager = cacheManager;
+//		DATA_DIR = (String) context.getAttribute("FSDatasetManager.data.dir");
+//		TEMP_DIR = (String) context.getAttribute("FSDatasetManager.temp.dir");
+		DATA_DIR = dataDir;
+		TEMP_DIR = tmpDir;
 	}
 	
 	private String getDatasetPath(final String datasetId) {
@@ -114,8 +117,9 @@ public class FSDatasetManager extends AbstractManager implements DatasetManager 
 	}
 
 	@Override
-	public UserDatasetBean importDataset(UserIdentity userIdentity, String datasetId) {
-		CacheManager cacheManager = ManagerFactory.getCacheManager(); 
+//	public UserDatasetBean importDataset(UserIdentity userIdentity, String datasetId) {
+	public UserDatasetBean importDataset(String datasetId) {
+//		CacheManager cacheManager = ManagerFactory.getCacheManager(); 
 		final String dataFileName = getDatasetPath(datasetId);
 		File dataFile = new File(dataFileName);
 		DataProvider dp = new DataProvider();

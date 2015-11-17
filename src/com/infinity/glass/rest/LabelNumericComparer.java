@@ -29,11 +29,6 @@ public class LabelNumericComparer {
 		
 		Object[] labels = labelColumn.getRows().toArray();
 		Object[] values = numericColumn.getRows().toArray();
-		for(int i = 0; i < labels.length; i++) {
-			System.out.println(String.format("Row: %d: label: %s, value: %s", i, labels[i], values[i]));
-		}
-		
-		
 		
 		
 		Map<String, DescriptiveStatistics> statMap = new HashMap<String, DescriptiveStatistics>();

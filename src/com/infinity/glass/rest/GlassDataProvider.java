@@ -5,13 +5,13 @@ import java.lang.reflect.ParameterizedType;
 import javax.servlet.ServletContext;
 
 import com.google.gson.Gson;
-import com.infinity.glass.manager.ManagerFactory;
+import com.infinity.glass.config.ConfigurationUtils;
 import com.infinity.glass.rest.data.DataProvider;
 import com.infinity.glass.rest.utils.CacheManager;
 
 public class GlassDataProvider<T> {
 
-	private final CacheManager cacheManager = ManagerFactory.getCacheManager();
+	private final CacheManager cacheManager = ConfigurationUtils.getCacheManager();
 	
 	protected String getCacheId(String id) {
 		int start = DataProvider.WEB_INF_DATA_XTRACT_CSV.lastIndexOf("\\");

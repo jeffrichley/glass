@@ -27,12 +27,12 @@ public class FauxDatasetManager extends AbstractManager implements DatasetManage
 	private static final Map<String, Map<String, FauxUserDatasetBean>> fauxData = new HashMap<String,
 			Map<String, FauxUserDatasetBean>>();
 
-	/**
-	 * 
-	 */
-	public FauxDatasetManager(ServletContext context) {
-		super(context);
-	}
+//	/**
+//	 * 
+//	 */
+//	public FauxDatasetManager(ServletContext context) {
+//		super(context);
+//	}
 
 	/* (non-Javadoc)
 	 * @see com.infinity.glass.manager.DatasetManager#getDatasetsForUser(java.lang.String)
@@ -108,7 +108,8 @@ public class FauxDatasetManager extends AbstractManager implements DatasetManage
 	}
 
 	@Override
-	public UserDatasetBean importDataset(UserIdentity userIdentity, String datasetId) {
+//	public UserDatasetBean importDataset(UserIdentity userIdentity, String datasetId) {
+	public UserDatasetBean importDataset(String datasetId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

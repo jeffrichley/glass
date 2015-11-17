@@ -7,7 +7,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
-import com.infinity.glass.manager.ManagerFactory;
+import com.infinity.glass.config.ConfigurationUtils;
 import com.infinity.glass.rest.data.CompareData;
 import com.infinity.glass.rest.data.DataColumn.Type;
 import com.infinity.glass.rest.data.DoubleDataColumn;
@@ -51,12 +51,7 @@ public class CompareProvider extends GlassDataProvider<CompareData> {
 		
 		if (data == null) {
 			MatrixData matrix = null;
-			try {
-				matrix = ManagerFactory.getDatasetManager(context).getMatrixData(fileName);
-			} catch (javax.resource.spi.IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			matrix = ConfigurationUtils.getDatasetManager().getMatrixData(fileName);
 			
 			Type firstType = matrix.getDataColumn(firstColumnName).getType();
 			Type secondType = matrix.getDataColumn(secondColumnName).getType();

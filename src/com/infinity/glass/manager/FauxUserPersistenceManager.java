@@ -20,11 +20,12 @@ import com.infinity.glass.model.UserIdentity;
 public class FauxUserPersistenceManager extends AbstractManager implements UserPersistence {
 
 	private static final Map<String,UserIdentity> users = new HashMap<String,UserIdentity>();
+	
 	/**
 	 * 
 	 */
 	public FauxUserPersistenceManager(ServletContext context) {
-		super(context);
+		super();
 	}
 
 	@Override
