@@ -44,8 +44,8 @@ public class LabelNumericComparer {
 						statMap.put(key, stat);
 					}
 					stat.addValue(value);
-				} else {
-					LOGGER.info(String.format("Row: %d: label: %s, value: %s", i, labels[i], values[i]));
+//				} else {
+//					LOGGER.info(String.format("Row: %d: label: %s, value: %s", i, labels[i], values[i]));
 				}
 			} else {
 				

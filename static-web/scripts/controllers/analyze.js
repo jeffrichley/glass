@@ -133,60 +133,26 @@ angular.module('glassApp').controller('AnalyzeCtrl', ['$scope', 'dataservice', '
 		for (var i = 0; i < $scope.selectedHeaders.length; i++) {
 		   if ($scope.selectedHeaders[i]) {
 			   var header = $scope.headers[i];
-			   // add the div at the top of the charts area
+			   var uuid = dataservice.getUUID();
+			   var activity = {
+					fieldOne: header,
+					//fieldTwo: $scope.headers[i],
+					title: 'Describing ' + header,
+					data: null,
+					correlation: null,
+					id: uuid
+			   };
+				
+			   $scope.activities.unshift(activity);
 			   
-			   var headerBar = '<div class="navbar navbar-default" role="navigation">' +
-	  			 '	<div class="container-fluid">' +
-	  			 '		<div class="navbar-header">' +
-	  			 '			<a class="navbar-brand" href="#">Describing '+header+'</a>' +
-	  			 '		</div>' +
-	  			 '	</div>' +
-	  			 '</div>';
-			   
-			   var progressBar = '<div class="progress">' +
-				  				 '	 <div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">' +
-				  				 '	   <span class="sr-only"></span>' +
-				  				 '  </div>' +
-				  				 '</div>';
-			   
-			   
-			   $('#charts').prepend(headerBar+'<div class="result-chart-area" id="'+header+'-compare">'+progressBar+'</div>');
-			   dataservice.describe(header).then(function(data){
-				   var chartdataValues = [[data.title, 'Values']];
+			   dataservice.describe(header, uuid).then(function(data){
 				   
-				   for (var i = 0; i < data.pairs.length; i++) {
-					   var pair = data.pairs[i];
-					   var entry = [pair.label, pair.value];
-					   chartdataValues.push(entry);
-				   }
-				   var chartdata = google.visualization.arrayToDataTable(chartdataValues);
-				   var chart = null;
-				   var options = null;
-				   // if less than 20 draw a bar chart, larger draws a column chart
-				   if (data.pairs.length < 20) {
-					   var height = data.pairs.length * 25;
-					   if (height < 300) {
-						   height = 300;
-					   }
-		               options = {
-		            	 legend: 'none',
-		                 title: data.title,
-		                 vAxis: {title: data.title,  titleTextStyle: {color: 'red'}},
-		                 height: height
-		               };
-		              chart = new google.visualization.BarChart(document.getElementById(data.title+'-compare'));
-				   } else {
-					   options = {
-		            	 legend: 'none',
-		                 title: data.title,
-		                 hAxis: {title: data.title,  titleTextStyle: {color: 'red'}},
-		                 height: 400
-		               };
-		              chart = new google.visualization.ColumnChart(document.getElementById(data.title+'-compare'));
-				   }
+				   var divUUID = data.uuid;
+				   var div = document.getElementById(divUUID);
 				   
-	               chart.draw(chartdata, options);
+				   chartservice.drawDescription(div, data);
 			   });
+				
 		   }
 		}
 	};

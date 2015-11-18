@@ -32,9 +32,10 @@ public class DescribeProvider extends GlassDataProvider<DescribeData> {
 	 */
 	@GET
 	@Produces("application/json")
-	@Path("/{fileName}/{fieldName}")
-	public DescribeData getDescribeData(@PathParam("fileName")final String fileName, @PathParam("fieldName")final String fieldName, 
-			@Context ServletContext context, @Context HttpServletRequest req) {
+	@Path("/{fileName}/{fieldName}/{uuid}")
+	public DescribeData getDescribeData(@PathParam("fileName")final String fileName, @PathParam("fieldName")final String fieldName,
+										@PathParam("uuid")final String uuid,
+										@Context ServletContext context, @Context HttpServletRequest req) {
 		DescribeData data = getCachedConfig("describe-info-"+fieldName+"-", fileName);
 		
 		if (data == null) {
@@ -56,6 +57,8 @@ public class DescribeProvider extends GlassDataProvider<DescribeData> {
 			cacheData(data, "describe-info-"+fieldName+"-", fileName);
 		}
 		
+		data.setUuid(uuid);
+
 		return data;
 	}
 }

@@ -43,7 +43,17 @@ public class StatsMath {
 	}
 
 	public static double getAnovaF(List<double[]> means) {
-		return new OneWayAnova().anovaPValue(means);
+		if (means.size() < 2) {
+			return 1;
+		}
+		
+		List<double[]> vals = new ArrayList<double[]>();
+		for (double[] ds : means) {
+			if (ds.length > 1) {
+				vals.add(ds);
+			}
+		}
+		return new OneWayAnova().anovaPValue(vals);
 	}
 
 	public static void main(String[] args) {

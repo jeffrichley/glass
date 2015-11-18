@@ -25,7 +25,7 @@ angular.module('glassApp')
 				msg = 'There is a very strong statistical correlation';
 			} else if (cor > .01 && cor <= .05) {
 				msg = 'There is a significant statistical correlation';
-			} else if (cor > .5 && cor <= .1) {
+			} else if (cor > .05 && cor <= .1) {
 				msg = 'There is a small statistical correlation';
 			} else {
 				msg = 'There is no statistical correlation';
@@ -93,9 +93,9 @@ angular.module('glassApp')
 			return deferred.promise;
 		};
 		
-		this.describe = function(field) {
+		this.describe = function(field, uuid) {
 			var deferred = $q.defer();
-			var url = describeURL + myFileName + '/' + field;
+			var url = describeURL + myFileName + '/' + field + '/' + uuid;
 			$http({method:'GET', url:url}).
 				success(function(data, status, headers, config) {
 					deferred.resolve(data);

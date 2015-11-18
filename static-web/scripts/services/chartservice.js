@@ -90,5 +90,42 @@ angular.module('glassApp')
 			chart.draw(chartData, options);
 		};
 		
+		svc.drawDescription = function(div, data) {
+			var chartdataValues = [[data.title, 'Values']];
+			
+			 for (var i = 0; i < data.pairs.length; i++) {
+				   var pair = data.pairs[i];
+				   var entry = [pair.label, pair.value];
+				   chartdataValues.push(entry);
+			   }
+			   var chartdata = google.visualization.arrayToDataTable(chartdataValues);
+			   var chart = null;
+			   var options = null;
+			   // if less than 20 draw a bar chart, larger draws a column chart
+			   if (data.pairs.length < 20) {
+				   var height = data.pairs.length * 25;
+				   if (height < 300) {
+					   height = 300;
+				   }
+	               options = {
+	            	 legend: 'none',
+	                 title: data.title,
+	                 vAxis: {title: data.title,  titleTextStyle: {color: 'red'}},
+	                 height: height
+	               };
+	              chart = new google.visualization.BarChart(div);
+			   } else {
+				   options = {
+	            	 legend: 'none',
+	                 title: data.title,
+	                 hAxis: {title: data.title,  titleTextStyle: {color: 'red'}},
+	                 height: 400
+	               };
+	              chart = new google.visualization.ColumnChart(div);
+			   }
+			   
+             chart.draw(chartdata, options);
+		}
+		
 		return svc;
 	});
