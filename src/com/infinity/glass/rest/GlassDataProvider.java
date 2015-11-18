@@ -81,7 +81,7 @@ public class GlassDataProvider<T> {
 	}
 
 	protected void cacheData(T data, String key, final String id) {
-		cacheManager.cache(getCacheId(key, id), new Gson().toJson(data));		
+		cacheManager.cache(getCacheId(key, id), new Gson().toJson(data));
 	}
 
 }
