@@ -12,7 +12,11 @@ public class CompareData {
 	private final String fieldTwo;
 	private final CompareType compareType;
 	private double correlation = 0;
-	private final String requestUUID;
+	private String requestUUID;
+
+	public void setRequestUUID(String requestUUID) {
+		this.requestUUID = requestUUID;
+	}
 
 	public CompareData(CompareType compareType, String fieldOne, String fieldTwo, String requestUUID) {
 		this.compareType = compareType;

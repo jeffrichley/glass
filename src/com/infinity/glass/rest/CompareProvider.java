@@ -1,5 +1,7 @@
 package com.infinity.glass.rest;
 
+import java.lang.reflect.ParameterizedType;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -7,8 +9,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 
+import com.google.gson.Gson;
 import com.infinity.glass.config.ConfigurationUtils;
 import com.infinity.glass.rest.data.CompareData;
+import com.infinity.glass.rest.data.DataColumn;
 import com.infinity.glass.rest.data.DataColumn.Type;
 import com.infinity.glass.rest.data.DoubleDataColumn;
 import com.infinity.glass.rest.data.LabelLabelCompareData;
@@ -46,24 +50,49 @@ public class CompareProvider extends GlassDataProvider<CompareData> {
 			@PathParam("uuid")final String uuid,
 			@Context ServletContext context) {
 		
-		// TODO: we don't have a good way to know what type of CompareData is to be created
-		// may be stored firstName-secondName or secondName-firstName
-//		CompareData data = getCachedConfig("compare-info-"+firstColumnName+"-"+secondColumnName+"-", fileName);
-//		if (data == null) {
-//			data = getCachedConfig("compare-info-"+secondColumnName+"-"+firstColumnName+"-", fileName);
-//		}
+		// TODO: this is really ugly, need to refactor
+		// try all the combinations of NUMERIC, LABEL and first,second
+		CompareData data = getCachedConfig("compare-info-LABEL-LABEL-"+firstColumnName+"-"+secondColumnName+"-", fileName, LabelLabelCompareData.class);
+		if (data == null) {
+			data = getCachedConfig("compare-info-NUMERIC-NUMERIC-"+firstColumnName+"-"+secondColumnName+"-", fileName, NumericNumericCompareData.class);
+		}
+		if (data == null) {
+			data = getCachedConfig("compare-info-NUMERIC-LABEL-"+firstColumnName+"-"+secondColumnName+"-", fileName, LabelNumericCompareData.class);
+		}
+		if (data == null) {
+			data = getCachedConfig("compare-info-LABEL-NUMERIC-"+firstColumnName+"-"+secondColumnName+"-", fileName, LabelNumericCompareData.class);
+		}
 		
-		CompareData data = null;
+		if (data == null) {
+			data = getCachedConfig("compare-info-LABEL-LABEL-"+secondColumnName+"-"+firstColumnName+"-", fileName, LabelLabelCompareData.class);
+		}
+		if (data == null) {
+			data = getCachedConfig("compare-info-NUMERIC-NUMERIC-"+secondColumnName+"-"+firstColumnName+"-", fileName, NumericNumericCompareData.class);
+		}
+		if (data == null) {
+			data = getCachedConfig("compare-info-NUMERIC-LABEL-"+secondColumnName+"-"+firstColumnName+"-", fileName, LabelNumericCompareData.class);
+		}
+		if (data == null) {
+			data = getCachedConfig("compare-info-LABEL-NUMERIC-"+secondColumnName+"-"+firstColumnName+"-", fileName, LabelNumericCompareData.class);
+		}
 		
+		
+		// ok ok we really don't have it cached
 		if (data == null) {
 			MatrixData matrix = ConfigurationUtils.getDatasetManager().getMatrixData(fileName);
 			data = ComputationUtil.calculateData(firstColumnName, secondColumnName, uuid, matrix);
 			
-//			cacheData(data, "compare-info-"+firstColumnName+"-"+secondColumnName+"-", fileName);
+			Type firstColumn = matrix.getDataColumn(firstColumnName).getType();
+			Type secondColumn = matrix.getDataColumn(secondColumnName).getType();
+			String type = firstColumn + "-" + secondColumn;
+			
+			cacheData(data, "compare-info-" + type + "-" +firstColumnName+"-"+secondColumnName+"-", fileName);
+		} else {
+			// if we got one that was cached, we need to set the uuid to make the browser think it was from this request
+			data.setRequestUUID(uuid);
 		}
 		
 		return data;
 	}
 
-	
 }

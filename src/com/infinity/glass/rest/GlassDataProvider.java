@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 
 import com.google.gson.Gson;
 import com.infinity.glass.config.ConfigurationUtils;
+import com.infinity.glass.rest.data.CompareData;
 import com.infinity.glass.rest.data.DataProvider;
 import com.infinity.glass.rest.utils.CacheManager;
 
@@ -58,6 +59,18 @@ public class GlassDataProvider<T> {
 			Class<T> genericClass = (Class<T>) ((ParameterizedType) getClass()
                     				.getGenericSuperclass()).getActualTypeArguments()[0];
 			answer = (T) new Gson().fromJson(cachedData, genericClass);
+		}
+		
+		return answer;
+	}
+	
+	protected CompareData getCachedConfig(final String key, String id, Class<? extends CompareData> clazz) {
+		String cacheId = getCacheId(key, id);
+		String cachedData = cacheManager.getData(cacheId);
+		
+		CompareData answer = null;
+		if (cachedData != null) {
+			answer = new Gson().fromJson(cachedData, clazz);
 		}
 		
 		return answer;
