@@ -24,7 +24,11 @@ public class StatsMath {
 			}
 		}
 
-		answer = new PearsonsCorrelation().correlation(x, y);
+		if (x.length < 2 || y.length < 2) {
+			answer = 0;
+		} else {
+			answer = new PearsonsCorrelation().correlation(x, y);
+		}
 
 		return answer;
 	}
@@ -43,16 +47,17 @@ public class StatsMath {
 	}
 
 	public static double getAnovaF(List<double[]> means) {
-		if (means.size() < 2) {
-			return 1;
-		}
-		
 		List<double[]> vals = new ArrayList<double[]>();
 		for (double[] ds : means) {
 			if (ds.length > 1) {
 				vals.add(ds);
 			}
 		}
+
+		if (vals.size() < 2) {
+			return 1;
+		}
+		
 		return new OneWayAnova().anovaPValue(vals);
 	}
 
@@ -60,7 +65,7 @@ public class StatsMath {
 		double[] classA = { 93.0, 103.0, 95.0, 101.0, 91.0, 105.0, 96.0, 94.0, 101.0 };
 		double[] classB = { 99.0, 92.0, 102.0, 100.0, 102.0, 89.0 };
 		double[] classC = { 110.0, 115.0, 111.0, 117.0, 128.0, 117.0 };
-		List classes = new ArrayList();
+		List<double[]> classes = new ArrayList<double[]>();
 		classes.add(classA);
 		classes.add(classB);
 		classes.add(classC);

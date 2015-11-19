@@ -88,7 +88,7 @@ public class ThreadedDataPreProcessor implements DataPreProcessor {
 			}
 		});
 		thread.setPriority(3);
-		thread.start();
+//		thread.start();
 	}
 
 }

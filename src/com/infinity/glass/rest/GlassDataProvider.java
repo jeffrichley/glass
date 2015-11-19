@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import javax.servlet.ServletContext;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.infinity.glass.config.ConfigurationUtils;
 import com.infinity.glass.rest.data.CompareData;
 import com.infinity.glass.rest.data.DataProvider;
@@ -77,11 +78,15 @@ public class GlassDataProvider<T> {
 	}
 	
 	protected void cacheData(T data, String id) {
-		cacheManager.cache(getCacheId(id), new Gson().toJson(data));		
+//		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
+		cacheManager.cache(getCacheId(id), gson.toJson(data));		
 	}
 
 	protected void cacheData(T data, String key, final String id) {
-		cacheManager.cache(getCacheId(key, id), new Gson().toJson(data));
+//		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().serializeSpecialFloatingPointValues().create();
+		cacheManager.cache(getCacheId(key, id), gson.toJson(data));
 	}
 
 }

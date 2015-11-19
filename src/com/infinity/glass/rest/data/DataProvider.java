@@ -146,10 +146,8 @@ public class DataProvider {
 		}
 
 		Iterator<String> iter = lines.iterator();
-		int lineNum = 1;
 		while (iter.hasNext() && !unknownHeaders.isEmpty()) {
 			String line = iter.next();
-			lineNum++;
 			String[] values = line.split(regex, -1);
 			for (int i = 0; i < headers.length; i++) {
 				String header = headers[i];
@@ -157,6 +155,12 @@ public class DataProvider {
 				if(i >= values.length) {
 					LOGGER.error("ArrayIndexOutOfBounds");
 				}
+				
+				if (values.length <= i) {
+					System.out.println(values.length +"***"+line+"***");
+				}
+				
+				
 				String value = values[i];
 				if (unknownHeaders.contains(header) && value != null && value.trim().length() > 0) { 
 					try {
