@@ -31,7 +31,7 @@ public class ThreadedDataPreProcessor implements DataPreProcessor {
 
 	@Override
 	public void preProcessMatrixData(final MatrixData md, final String uuid) {
-		new Thread(new Runnable() {
+		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				// TODO: the system only caches the descriptions right now, need to do all of it and then precompute
@@ -86,7 +86,9 @@ public class ThreadedDataPreProcessor implements DataPreProcessor {
 					}
 				}
 			}
-		}).start();
+		});
+		thread.setPriority(3);
+		thread.start();
 	}
 
 }
