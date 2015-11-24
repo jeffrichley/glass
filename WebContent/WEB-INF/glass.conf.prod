@@ -1,0 +1,5 @@
+import.directory=/webserver/var/glass/import
+cache.directory=/webserver/var/glass/cache
+
+# comma separated list of features to ignore
+ignored.features=EVENT_NARRATIVE

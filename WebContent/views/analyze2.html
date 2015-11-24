@@ -1,0 +1,82 @@
+<div id="graph"></div>
+
+<!-- action type - describe or compare -->
+<form class="form-horizontal" role="form">
+	<!-- <p class="lead"><u>I want to:</u></p> -->
+	<!-- <div class="row" data-ng-if="model.instructions.length == 0">
+		<div class="col-sm-12">
+			<div class="alert alert-danger" role="alert">
+				An Instruction Must Be Specified
+			</div>
+		</div>
+	</div> -->
+	<div class="row">
+		<div class="col-sm-6">
+			I want to:
+		</div>
+		<div class="col-sm-6">
+			<div class="btn-group btn-group-justified" role="group">
+				<a data-ng-click="describeClicked()" class="btn btn-default" data-ng-class="{'btn-primary': action == DESCRIBE_ACTION}" 
+					role="button">{{DESCRIBE_ACTION}}</a>
+				<a data-ng-click="compareClicked()" class="btn btn-default" data-ng-class="{'btn-primary': action == COMPARE_ACTION}" 
+					role="button">{{COMPARE_ACTION}}</a>
+			</div>
+		</div>
+	</div>
+</form>
+
+<form class="form-horizontal" role="form" data-ng-if="action != undefined">
+	<!-- <ul>
+		<li data-ng-repeat="field in fields">{{field.label}}</li>
+	</ul>-->
+	<div class="row">
+		<div class="col-sm-6">
+			This Field:
+		</div>
+		<div class="col-sm-6">
+			<div class="dropdown">
+				<button class="btn btn-default dropdown-toggle" type="button">{{selectedFields.field1.label}} <span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu">
+					<li role="presentation" class="dropdown-header">Quantitative</li>
+					<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'NUMERIC' }">
+						<a role="menuitem" tabindex="-1" href data-ng-click="field1Clicked(field)">{{field.label}}</a>
+					</li>
+					<li role="presentation" class="divider">
+					<li role="presentation" class="dropdown-header">Qualitative</li>
+					<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'LABEL' }">
+						<a role="menuitem" tabindex="-1" href data-ng-click="field1Clicked(field)">{{field.label}}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</form>
+
+<form class="form-horizontal" role="form" data-ng-if="action == COMPARE_ACTION && selectedFields.field1 != undefined">
+	<div class="row">
+		<div class="col-sm-6">
+			With:
+		</div>
+		<div class="col-sm-6">
+			<div class="dropdown">
+				<button class="btn btn-default dropdown-toggle" type="button">{{selectedFields.field2.label}} <span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu">
+					<li role="presentation" class="dropdown-header">Quantitative</li>
+					<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'NUMERIC' }">
+						<a role="menuitem" tabindex="-1" href data-ng-click="field2Clicked(field)">{{field.label}}</a>
+					</li>
+					<li role="presentation" class="divider">
+					<li role="presentation" class="dropdown-header">Qualitative</li>
+					<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'LABEL' }">
+						<a role="menuitem" tabindex="-1" href data-ng-click="field2Clicked(field)">{{field.label}}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</form>
+
+
+<div class="text-center" data-ng-if="action == COMPARE_ACTION && selectedFields.field1 != undefined && selectedFields.field2 != undefined">
+	<a class="btn btn-lg btn-success" data-ng-click="plotClicked()">Plot <span class="glyphicon glyphicon-stats"></span></a>
+</div>

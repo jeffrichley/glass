@@ -1,0 +1,37 @@
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+svg {
+	border: 1px solid #eeeeee;
+	margin-bottom: 25px;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+line#bestfit {
+	stroke: steelblue;
+	stroke-width: 1.5px;
+}
+
+path {
+	fill: #CED8B6;
+}
+
+
+#xAxis path, #yAxis path, #xAxis line, #yAxis line {
+	stroke: #ccc;
+	fill: none;
+	shape-rendering: crispEdges;
+}

@@ -1,0 +1,48 @@
+<!-- Side Buttons -->
+<div class="col-md-2">
+	<div class="btn-group select-button-row">
+		<button class="btn btn-success" ng-disabled="!numToDescribe || numToDescribe == 0" ng-click="describe()">Describe <span class="badge">{{numToDescribe}}</span></button>
+		<button class="btn btn-success" ng-disabled="!numToCompare || numToCompare == 0" ng-click="compare()">Compare <span class="badge">{{numToCompare}}</span></button>
+	</div>
+	<div ng-repeat="buttonName in headers" class="row select-button-row">
+		<div class="row">
+			<button ng-click="selectKey($index)" class="btn btn-plain btn-lg nsc-key-btn" data-toggle="tooltip" data-placement="bottom" title="When you Compare, each selected variable will be related to this key variable">
+				<span ng-show="selectedKey == $index" class="glyphicon glyphicon-star"></span>
+				<span ng-hide="selectedKey == $index">&nbsp;</span>
+			</button>
+			<button ng-class="buttonStyles[$index]" btn-checkbox ng-model="selectedHeaders[$index]">{{buttonName}}</button>
+		</div>
+	</div>
+</div>
+
+<!-- Middle Area -->
+<div id="charts" class="col-md-8 col-md-offset-1">
+
+	<div ng-repeat="activity in activities">
+		<div class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+			 	<div class="navbar-header">
+			  		<a class="navbar-brand" href="#">{{activity.title}}</a>
+			  	</div>
+			  	<!-- 
+			  	 -->
+				<p class="navbar-text pull-right lead">{{activity.correlationMsg}}</p>
+			</div>
+		</div>
+		
+		<div id="{{activity.id}}" class="result-chart-area">
+			<div class="progress">
+				<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+					<span class="sr-only"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<div ng-show="showInitialSplash" class="jumbotron">
+		<h1>Get insights to your data</h1>
+		<p>Select items from the side menu and see how they compare with each other.</p>
+	</div>
+</div>
