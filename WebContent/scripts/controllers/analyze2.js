@@ -46,7 +46,12 @@ angular.module('glassApp').controller('Analyze2Ctrl', function ($scope, GraphFac
 	$scope.primaryFieldSelected = function(field) {
 		$scope.primaryField = field;
 	};
-	
+
+	$scope.primarySecondarySelected = function(field) {
+		$scope.secondaryField = field;
+		toggle($scope.ancillaryFields, field);
+	};
+
 	$scope.toggleField = function(field) {
 		toggle($scope.ancillaryFields, field);
 	};
@@ -59,11 +64,13 @@ angular.module('glassApp').controller('Analyze2Ctrl', function ($scope, GraphFac
 	$scope.describeClicked = function() {
 		$scope.action = $scope.DESCRIBE_ACTION;
 		$scope.ancillaryFields = []; // wipe out selected fields on click
+		$scope.secondaryField = null;
 	};
 	
 	$scope.compareClicked = function() {
 		$scope.action = $scope.COMPARE_ACTION;
 		$scope.ancillaryFields = []; // wipe out selected fields on click
+		$scope.secondaryField = null;
 	};
 	
 	dataservice.getUIFields().then(function(data) {

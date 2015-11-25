@@ -29,11 +29,11 @@ angular
 //      })
       .when('/analyze/:dataId', {
 //        templateUrl: 'views/analyze3.html',
-    	  templateUrl: 'views/analyze4.html',
+    	  templateUrl: 'views/analyze5.html',
         controller: 'Analyze2Ctrl'
       })
       .when('/analyze2/:dataId', {
-        templateUrl: 'views/analyze2.html',
+        templateUrl: 'views/analyze4.html',
         controller: 'Analyze2Ctrl'
       })
       .when('/analyze3/:dataId', {

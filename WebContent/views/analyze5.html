@@ -1,0 +1,123 @@
+<div class="row">
+	<div data-ng-show="showSidePadding" class="col-md-4"></div>
+	<div class="col-md-4">
+	
+	
+
+
+<!-- Side Buttons -->
+<div class="well col-md-offset-1">
+	<div class="text-center">
+		<h1>I Want To...</h1>
+	</div>
+	
+	<div class="col-md-12 text-center">
+		<div class="btn-group btn-group-justified" role="group">
+			<a data-ng-click="describeClicked()" class="btn btn-default" data-ng-class="{'btn-primary': action == DESCRIBE_ACTION}" 
+				role="button">{{DESCRIBE_ACTION}}</a>
+			<a data-ng-click="compareClicked()" class="btn btn-default" data-ng-class="{'btn-primary': action == COMPARE_ACTION}" 
+				role="button">{{COMPARE_ACTION}}</a>
+		</div>
+	</div>
+	
+	<div class="text-center prompt" data-ng-if="action == COMPARE_ACTION">
+		<h1>This Field...</h1>
+	</div>
+	
+	<div class="text-center col-md-12" data-ng-if="action == COMPARE_ACTION">
+		<div class="dropdown">
+			<button class="btn btn-default dropdown-toggle" id="dropdownMenu" type="button" data-toggle="dropdown" area-expanded="true">{{primaryField.label}} <span class="caret"></span></button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+				<li role="presentation" class="dropdown-header">Quantitative</li>
+				<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'NUMERIC' }">
+					<a role="menuitem" tabindex="-1" data-ng-click="primaryFieldSelected(field)">{{field.label}}</a>
+				</li>
+				<li role="presentation" class="divider">
+				<li role="presentation" class="dropdown-header">Qualitative</li>
+				<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'LABEL' }">
+					<a role="menuitem" tabindex="-1" data-ng-click="primaryFieldSelected(field)">{{field.label}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	
+	<div class="text-center prompt" data-ng-if="action == DESCRIBE_ACTION">
+		<h1>This Field...</h1>
+	</div>
+	
+	<div class="text-center prompt" data-ng-if="action == COMPARE_ACTION && primaryField != undefined">
+		<h1>With This Field...</h1>
+	</div>
+	
+	
+	<div class="row field-selection text-center" data-ng-if="action == DESCRIBE_ACTION || (action == COMPARE_ACTION && primaryField != undefined)">
+		<div class="dropdown">
+			<button class="btn btn-default dropdown-toggle" id="dropdownMenu" type="button" data-toggle="dropdown" area-expanded="true">{{secondaryField.label}} <span class="caret"></span></button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+				<li role="presentation" class="dropdown-header">Quantitative</li>
+				<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'NUMERIC' }">
+					<a role="menuitem" tabindex="-1" data-ng-click="primarySecondarySelected(field)">{{field.label}}</a>
+				</li>
+				<li role="presentation" class="divider">
+				<li role="presentation" class="dropdown-header">Qualitative</li>
+				<li role="presentation" data-ng-repeat="field in fields | filter: { type: 'LABEL' }">
+					<a role="menuitem" tabindex="-1" data-ng-click="primarySecondarySelected(field)">{{field.label}}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	
+
+	
+	<div class="text-center prompt visualizeButton">
+		<a class="btn btn-success"
+			data-ng-disabled="!((action == DESCRIBE_ACTION || (action == COMPARE_ACTION && primaryField != undefined)) 
+					&& ancillaryFields.length > 0)"
+			data-ng-click="visualizeClicked()">Visualize <span class="glyphicon glyphicon-stats"></span></a>
+	</div>
+</div>
+
+
+
+	</div>
+	<div class="col-md-7">
+	
+
+
+
+
+
+
+<div id="charts" class="charts">
+	<div id="row">
+		<div id="col-md-12">
+			<div ng-repeat="activity in activities" class="activity" style="width:100%;">
+				<div class="navbar navbar-default" role="navigation">
+					<div class="container-fluid">
+					 	<div class="navbar-header">
+					  		<a class="navbar-brand" href="#">{{activity.title}}</a>
+					  	</div>
+						<p class="navbar-text pull-right lead">{{activity.correlationMsg}}</p>
+					</div>
+				</div>
+				
+				<div id="{{activity.id}}" class="result-chart-area">
+					<div class="progress">
+						<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+							<span class="sr-only"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+	</div>
+
+
+</div>
