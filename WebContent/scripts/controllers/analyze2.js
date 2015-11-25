@@ -95,7 +95,6 @@ angular.module('glassApp').controller('Analyze2Ctrl', function ($scope, GraphFac
 	// for google charts
 	$scope.visualizeClicked = function() {
 		// hide the side 3 columns to put two main columns
-		console.log()
 		$scope.showSidePadding = false;
 		
 		var field2s = [];
@@ -193,11 +192,12 @@ angular.module('glassApp').controller('Analyze2Ctrl', function ($scope, GraphFac
             var div = document.getElementById(activity.id);
             chart = new google.visualization.BarChart(div);
 		} else {
+			var height = (data.pairs.length * 15) + 300;
 			options = {
 				legend: 'none',
 				title: data.title,
 				hAxis: {title: data.title,  titleTextStyle: {color: 'red'}},
-				height: 400,
+				height: height,
 				width: '100%'
 //				chartArea: {left:0, top:0, width:'100%', height:'100%'}
 			};

@@ -65,6 +65,7 @@ angular.module('glassApp')
 		};
 		
 		svc.drawScatterPlot = function(div, data) {
+			
 			var chartDataValues = [];
 			chartDataValues.push([data.fieldOne, data.fieldTwo]);
 			for (var i = 0; i < data.points.length; i++) {
