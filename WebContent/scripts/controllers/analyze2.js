@@ -49,6 +49,7 @@ angular.module('glassApp').controller('Analyze2Ctrl', function ($scope, GraphFac
 
 	$scope.primarySecondarySelected = function(field) {
 		$scope.secondaryField = field;
+		$scope.ancillaryFields = [];
 		toggle($scope.ancillaryFields, field);
 	};
 
@@ -193,6 +194,9 @@ angular.module('glassApp').controller('Analyze2Ctrl', function ($scope, GraphFac
             chart = new google.visualization.BarChart(div);
 		} else {
 			var height = (data.pairs.length * 15) + 300;
+			if (height > 1000) {
+				height = 1000;
+			}
 			options = {
 				legend: 'none',
 				title: data.title,
